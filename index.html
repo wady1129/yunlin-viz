@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <title>Yunlin Instance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <h1>Yunlin Instance 可視化</h1>
+      <div class="muted">選一個 Instance；任兩個節點 按「顯示」；或開啟「矩陣」看所有節點對。</div>
+
+      <div class="group">
+        <label>Instance</label>
+        <select id="instanceSel"><option value="">-- 請選擇 --</option></select>
+        <div id="instMeta" class="muted" style="margin-top:6px;"></div>
+      </div>
+
+      <div class="group">
+        <div class="row">
+          <div>
+            <label>節點 A</label>
+            <select id="originSel"></select>
+          </div>
+          <div>
+            <label>節點 B</label>
+            <select id="destSel"></select>
+          </div>
+          <div>
+            <button id="showBtn" disabled>顯示</button>
+          </div>
+        </div>
+        <div id="routeInfo" class="pill" style="display:none;"></div>
+      </div>
+
+      <div class="legend">
+        <span><span class="dot green"></span>Origin</span>
+        <span><span class="dot orange"></span>Dest</span>
+      </div>
+
+      <div class="group">
+        <label>所有節點間最短時間</label>
+        <button id="showMatrixBtn" class="secondary">開啟矩陣（全螢幕）</button>
+      </div>
+
+      <div class="group">
+        <label>狀態</label>
+        <div id="log" class="log">初始化中…</div>
+      </div>
+    </aside>
+
+    <main class="mapwrap">
+      <div id="map"></div>
+    </main>
+  </div>
+
+  <!-- ===== 矩陣全螢幕面板 ===== -->
+  <div id="matrixModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-body" role="dialog" aria-modal="true" aria-labelledby="matrixTitle">
+      <div class="modal-header">
+        <div class="title">
+          <strong id="matrixTitle">所有節點間最短行車時間</strong>
+          <span id="matrixSubtitle" class="muted"></span>
+        </div>
+        <div class="tools">
+          <button id="btnFit"   title="適螢幕">適</button>
+          <button id="btnZoomOut" title="縮小">−</button>
+          <button id="btnZoomIn"  title="放大">＋</button>
+          <button id="btnClose" class="danger" title="關閉（Esc）">關閉</button>
+        </div>
+      </div>
+      <div class="modal-content">
+        <div id="matrixViewport" class="matrixViewport">
+          <!-- 這裡放矩陣表格 -->
+        </div>
+        <div class="legendbar">
+          <span class="muted">分鐘</span>
+          <div class="legendbar-grad"></div>
+          <span class="muted">↑ 越深表示越久</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+<script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(console.error);
+    }
+  </script>
+</body>
+</html>
